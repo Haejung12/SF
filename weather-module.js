@@ -2,8 +2,7 @@ const request = require('request');
 const template = require('./view/template');
 const apiURI = 'http://api.openweathermap.org/data/2.5/weather?q=Yongin,kr&units=metric&appid=';
 const apiKey = 'b236a28e1231b9c7039de3b20ce41ffc';
-
-
+ 
 module.exports = {
     getWeather: function(callback) {
         var weatherURI = apiURI + apiKey;
@@ -33,4 +32,3 @@ module.exports = {
         });
     }
 }
-
