@@ -1,30 +1,49 @@
-module.exports.home = function(navBar, menuLink) {
-    let temp = 20;
-    let humid = 30;
-    let cds = 98;
-    let dist = 10.5;
-    let sTime = "2020-02-14 09:50:23";
-    let sUid = 'admin';
-    let red = 100;
-    let green = 120;
-    let blue = 200;
-    let relay = 1;
-    let aTime = "2020-02-14 09:51:23";
-    let aUid = 'admin';
+const template = require('./template');
+const header = template.header();
+
+module.exports.home = function(navBar, menuLink, sensor, actuator) {
+    let temp = sensor.temperature;
+    let humid = sensor.humidity;
+    let cds = sensor.cds;
+    let dist = sensor.distance;
+    let sTime = sensor.sTime;
+    let sUid = sensor.uid;
+    let red = actuator.redLED;
+    let green = actuator.greenLED;
+    let blue = actuator.blueLED;
+    let relay = actuator.relay;
+    let aTime = actuator.aTime;
+    let reason = actuator.reason;
+    let aUid = actuator.uid;
+  
+
+    const TEMP_LOW = 18.0;
+    const TEMP_HIGH = 25.0;
+    const HUMID_LOW = 20.0;
+    const HUMID_HIGH = 25.0;
+    const CDS_LOW = 65.0;
+    const CDS_HIGH = 100.0;
+    const DIST_LOW = 10.0;
+    const DIST_HIGH = 30.0
+    
+  
+    if (temp > TEMP_HIGH) bgtemp = "bg-danger";
+    else if (temp < TEMP_LOW) bgtemp = "bg-secondary";
+    else bgtemp = "bgsuccess";
+    if (humid > HUMID_HIGH) bghumid = "bg-danger";
+    else if (humid < HUMID_LOW) bghumid  = "bg-secondary";
+    else bghumid = "bg-success";
+    if (cds > CDS_HIGH) bgcds = "bg-danger";
+    else if (cds < CDS_LOW) bgcds = "bg-secondary";
+    else bgcds = "bg-success";
+    if (dist > DIST_HIGH) bgdist = "bg-danger";
+    else if (dist < DIST_LOW) bgdist = "bg-secondary";
+    else bgdist = "bg-success";
     return `
-<html>
+<!DOCTYPE html>
+<html lang="ko">
 <head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<!-- ==================================================================== -->
-    <title>강남 스마트팜</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
-        integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+	${header}
 </head>
 <body>
 <div class="container">
@@ -49,44 +68,46 @@ module.exports.home = function(navBar, menuLink) {
                         </thead>
                         <tbody>
                         <tr>
-                            <td><i class="fas fa-thermometer-half"></i>&nbsp;&nbsp;온도</td>
+                            <td><span style="color:red"><i class="fas fa-thermometer-half"></span></i>&nbsp;&nbsp;온도</td>
                             <td>0 ~ 40℃</td>
                             <td style="text-align: center;">
                                 <div class="progress" style="height: 25px; width: 400px">
-                                    <div class="progress-bar bg-warning" role="progressbar" style="width: ${temp/40*100}%" aria-valuemin="0" aria-valuemax="40">${temp}</div>
+                                <div class="progress-bar ${bgtemp}" role="progressbar" style="width: ${temp/40*100}%"  aria-valuemin="0" aria-valuemax="40">${temp}</div>
                                 </div></td>
                             <td>${sUid}</td>
                         </tr>
                         <tr>
-                            <td><i class="fas fa-tint"></i>&nbsp;&nbsp;습도</td>
-                            <td>0 ~ 60%</td>
+                            <td><span style="color:blue"><i class="fas fa-tint"></span></i>&nbsp;&nbsp;습도</td>
+                            <td>0 ~ 100%</td>
                             <td style="text-align: center;">
                                 <div class="progress" style="height: 25px; width: 400px">
-                                    <div class="progress-bar bg-info" role="progressbar" style="width: ${humid/60*100}%" aria-valuemin="0" aria-valuemax="60">${humid}</div>
+                                    <div class="progress-bar ${bghumid}" role="progressbar" style="width: ${humid/100*100}%" aria-valuemin="0" aria-valuemax="100">${humid}</div>
                                 </div></td>
                             <td>${sUid}</td>
                         </tr>
                         <tr>
-                            <td><i class="far fa-lightbulb"></i>&nbsp;&nbsp;조도</td>
-                            <td>0 ~ 100</td>
+                            <td><span style="color:gold"><i class="far fa-lightbulb"></span></i>&nbsp;&nbsp;조도</td>
+                            <td>0 ~ 1000</td>
                             <td style="text-align: center;">
                                 <div class="progress" style="height: 25px; width: 400px">
-                                    <div class="progress-bar bg-danger" role="progressbar" style="width: ${cds/100*100}%" aria-valuemin="0" aria-valuemax="100">${cds}</div>
+                                    <div class="progress-bar ${bgcds}" role="progressbar" style="width: ${cds/1000*100}%" aria-valuemin="0" aria-valuemax="1000">${cds}</div>
                                 </div></td>
                             <td>${sUid}</td>
                         </tr>
                         <tr>
-                            <td><i class="fas fa-ruler-vertical"></i>&nbsp;&nbsp;거리</td>
-                            <td>0 ~ 50cm</td>
+                            <td><span style="color:black"><i class="fas fa-ruler-vertical"></span></i>&nbsp;&nbsp;거리</td>
+                            <td>0 ~ 100cm</td>
                             <td style="text-align: center;">
                                 <div class="progress" style="height: 25px; width: 400px">
-                                    <div class="progress-bar bg-dark" role="progressbar" style="width: ${dist/50*100}%" aria-valuemin="0" aria-valuemax="100">${dist}</div>
+                                    <div class="progress-bar ${bgdist}" role="progressbar" style="width: ${dist/100*100}%" aria-valuemin="0" aria-valuemax="100">${dist}</div>
                                 </div></td>
                             <td>${sUid}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" style="text-align: right;">최종 측정시각: ${sTime}</td>
                         </tr>
                         </tbody>
                     </table>
-                    <p style="text-align: right;">최종 측정시각: ${sTime}</p>
                 </div>
                 <div class="col-1"></div><br>
                 <div class="col-11">
@@ -132,9 +153,12 @@ module.exports.home = function(navBar, menuLink) {
                                 </div></td>
                             <td>${aUid}</td>
                         </tr>
+                        <tr>
+                            <td colspan="2">조작 사유: ${reason}</td>
+                            <td colspan="2" style="text-align: right;">최종 조작시각: ${aTime}</td>
+                        </tr>
                         </tbody>
                     </table>
-                    <p style="text-align: right;">최종 조작시각: ${aTime}</p>
                 </div>
                 <div class="col-1"></div><br>
                 </div>

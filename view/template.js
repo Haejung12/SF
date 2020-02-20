@@ -68,5 +68,18 @@ module.exports = {
             <img src="${ico}" width="32" height="32">&nbsp;
             기온: ${temp}&#8451;, 습도: ${humid}% &nbsp;&nbsp;&nbsp;
         `;
+    },
+    header: function() {
+        return `
+            <meta charset="utf-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <!-- ==================================================================== -->
+            <title>강남 스마트팜</title>
+            <link rel="stylesheet" href="/css/bootstrap.min.css">
+            <script src="/fontawesome/all.min.js"></script>
+            <script src="/jquery/jquery.min.js"></script>
+            <script src="/js/bootstrap.bundle.min.js"></script>
+        `;
     }
 }
