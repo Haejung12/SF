@@ -29,7 +29,7 @@ module.exports.home = function(navBar, menuLink, sensor, actuator) {
   
     if (temp > TEMP_HIGH) bgtemp = "bg-danger";
     else if (temp < TEMP_LOW) bgtemp = "bg-secondary";
-    else bgtemp = "bgsuccess";
+    else bgtemp = "bg-success";
     if (humid > HUMID_HIGH) bghumid = "bg-danger";
     else if (humid < HUMID_LOW) bghumid  = "bg-secondary";
     else bghumid = "bg-success";
